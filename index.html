@@ -1,0 +1,117 @@
+<html>
+
+<head>
+    <title>Task Board</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.0/dist/css/bootstrap.min.css"
+        crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <style>
+        .main-board {
+            display: flex;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modal-content {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="header container mt-5">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">Add
+                Card</button>
+            <button type="button" class="btn btn-danger" @click="deleteAll()">Delete All Cards</button>
+        </div>
+
+        <div class="main-board m-5">
+            <div class="container jumbotron">
+                <div class="card mt-3" v-for="todo in todos.filter((card)=> card.status=='to-do')"
+                    @click="onCardClk(todo)">
+                    <div class="card-header">
+                        <h5>{{ todo.title }} </h5>
+                        <span style="cursor: pointer;" @click.stop.prevent="deleteTodo(todo.id)">❌</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text">
+                            {{todo.description}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container jumbotron">
+                <div class="card mt-3" v-for="todo in todos.filter((card)=> card.status=='working')"
+                    @click="onCardClk(todo)">
+                    <div class="card-header">
+                        <h5>{{ todo.title }} </h5>
+                        <span style="cursor: pointer;" @click.stop.prevent="deleteTodo(todo.id)">❌</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text">
+                            {{todo.description}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container jumbotron">
+                <div class="card mt-3" v-for="todo in todos.filter((card)=> card.status=='done')"
+                    @click="onCardClk(todo)">
+                    <div class="card-header">
+                        <h5>{{ todo.title }} </h5>
+                        <span style="cursor: pointer;" @click.stop.prevent="deleteTodo(todo.id)">❌</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text">
+                            {{todo.description}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" ref="vuemodal" id="exampleModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <h5>{{ input.selectedCardId?'Updating card': 'Creating card' }}</h5>
+                    <input type="text" class="form-control mt-3" v-model="input.title" placeholder="Enter Title (only alphabets)"
+                        required />
+                    <input type="text" class="form-control mt-3" v-model="input.description"
+                        placeholder="Enter Description (min 25 chars)" />
+                    <select class="form-control mt-3" v-model="input.status">
+                        <option value="to-do">To-Do</option>
+                        <option value="working">Working</option>
+                        <option value="done">Done</option>
+                    </select>
+
+                    <div class="modal-footer">
+                        <button type="button" v-if="input.selectedCardId" class="btn btn-danger"
+                            @click="deleteTodo(input.selectedCardId)">Delete Card</button>
+                        <button type="button" class="btn btn-secondary" @click="close">Close</button>
+                        <button type="button" @click="createOrUpdateTodo" class="btn btn-primary">{{
+                            input.selectedCardId?'Update card': 'Create card '}}✌</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="./main.js"></script>
+</body>
+
+</html>
